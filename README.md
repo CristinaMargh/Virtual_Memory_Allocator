@@ -1,70 +1,70 @@
 # Virtual_Memory_Allocator
-First project(SDA)
+First project (SDA)
 #MARGHEANU CRISTINA-ANDREEA 313CA 2022-2023
-In programul principal citesc comanda ce ne va preciza ce operatie trebuie sa
-efectuam. Pentru fiecare comanda introdusa citesc parametrii necesari 
-subprogramelor construite (adresele de inceput, dimensiunile).
+In the main program, I read the command that will tell us what operation we have to do
+we perform. For each entered command, I read the necessary parameters
+built subprograms (starting addresses, sizes).
 
-Rezolvarea problemei foloseste implemnetarea listelor dublu inlantuite si
-operatiile specifice ale acestora. Pentru simplificarea parcurgerii am 
-introdus in structura listei si un nod *tail, ce va retine caracteristicile 
-nodului din coada listei. 
+Solving the problem uses the implementation of doubly linked lists and
+their specific operations. To simplify the process I have
+introduced in the list structure and a *tail node, which will retain the characteristics
+the node in the tail of the list.
 
-Functiile folosite  ce privesc in mod direct notiunea de lista sunt:
-- dll_create , ce aloca memorie pentru lista si ii initializeza componentele
--dll_get_nth_node parcurge fiecare nod in parte atata timp cat acesta exista, 
-pana ajunge la indexul cerut(la pozitia cautata din lista), returnand nodul
-aflat la acea pozitie. Daca nu exista un nod urmator, lista este goala.
--functie pentru stergerea unui anumit nod, ce intoarce un pointer spre acesta.
-Am verificat cazurile de eroare, m-am pozitionat in lista la pozitia data de 
-parametrul n, iar in functie de indexul dat mutam elementele din lista pentru
-eliminarea celui dorit. In mod asemanator procedam si pentru adaugarea unui
-nod. Modificam campul next atat pentru nodul in urma caruia vom adauga, dar
-si pe cel al nodului adaugat. Daca vrem sa adaugam pe prima pozitie , acesta
-devine head-ul liste, iar daca adaugam la final devine tail-ul listei. 
-Complexitatea in aceste cazuri speciale este O(1) spre deosebire de O(n)
-in momentul iterarii prin lista.
--dll_get_size ce intoarce numarul de elemente din lista intr-o complexitate
-de O(1)
+The functions used that directly concern the list notion are:
+- dll_create, which allocates memory for the list and initializes its components
+-dll_get_nth_node goes through each node individually as long as it exists,
+until it reaches the required index (at the searched position in the list), returning the node
+in that position. If there is no next node, the list is empty.
+- function for deleting a certain node, which returns a pointer to it.
+I checked the error cases, I positioned myself in the list at the given position
+parameter n, and depending on the given index we move the elements from the list for
+removing the desired one. Similarly, we proceed to add one
+node. We modify the next field both for the node after which we will add but
+and that of the added node. If we want to add to the first position, this one
+becomes the head of the list, and if we add it to the end, it becomes the tail of the list.
+The complexity in these special cases is O(1) as opposed to O(n)
+when iterating through the list.
+-dll_get_size which returns the number of elements in the list in a complexity
+by O(1)
 
-Suprogramele create ce privesc in mod direct comenzile din problema sunt:
--alloc_arena in cadrul careia initializam dimensiunea arenei si lista de 
-blocuri ce urmeaza sa fie pozitionate in careu. Structura lor o sa fie de
-lista inlantuita, asa ca initializarea se face folosind un subprogram de creare 
-a listelor. 
+The subprograms created that directly concern the commands in the problem are:
+-alloc_arena in which we initialize the size of the arena and the list of
+blocks to be positioned in the square. Their structure will be of
+chained list, so initialization is done using a create subroutine
+of the lists.
 
--pentru dealocarea resurselor din cadrul unei arene, ne pozitionam la 
-inceputul acesteia(in capul listei) si parcurgem intreaga lista de blocuri. 
-Cand ne pozitionam la inceputul unui bloc verificam daca acesta contine mai 
-multe miniblocuri. In caz afirmativ le stergem pe rand, avand grija sa 
-eliminam si memoria alocata bufferului read-write. Dupa eliminarea tuturor
-miniblocurilor din cadrul blocului curent, eliberam memoria alocata
-listei de miniblocuri, dar si blocului si mergem la blocul urmator pana cand
-le parcurgem pe toate. Astfel memoria alocata elementelor din arena a fost
-dezalocata si putem incheia subprogramul. 
+- for the reallocation of resources within an arena, we position ourselves at
+its beginning (at the top of the list) and we go through the entire list of blocks.
+When we position ourselves at the beginning of a block, we check if it contains more
+many mini blocks. If so, we delete them one by one, being careful
+we also remove the memory allocated to the read-write buffer. After removing all
+miniblocks within the current block, we release the allocated memory
+the list of mini-blocks, but also the block and we go to the next block until
+we go through them all. Thus the memory allocated to the elements in the arena was
+deallocated and we can end the subprogram.
 
--pentru functia de alocare a unui bloc, verificam mai intai cazurile de 
-eroare dupa care efectuam operatiile in functie de pozitia din lista 
-in care vrem sa adaugam o noua entitate.  
-Analog pentru eliberarea memoriei in functia free_block verificam daca nodul
-se afla la inceputul sau finalul listei de blocuri. Pentru aflarea dimensiunii
-unui bloc ne folosim de suprogramul count ce pleaca de la un nod primit
-ca parametru si intoarce suma size-urilor pentru miniblocurile din acea
-portiune.
+- for the function of allocating a block, we first check the cases of
+error, after which we perform the operations according to the position in the list
+in which we want to add a new entity.
+Analogous for freeing the memory in the free_block function, we check if the node
+is at the beginning or end of the block list. To find out the size
+of a block we use the count subprogram that starts from a received node
+as a parameter and returns the sum of the sizes for the miniblocks in that one
+portion.
 
--pentru functia de citire , stochez dimensiunea pe care trebuie sa o citesc.
-Intr-un char plasam informatia din miniblock->rw_buffer si o afisam atata 
-timp cat nu am ajuns la finalul textului, iterand in permanenta si prin
-lista de miniblockuri. Analog pentru functia write, inlocuim operatia de 
-afisare cu cea de alocare de memorie si copiere a informatiei date.
+- for the reading function, I store the size that I need to read.
+In a char we place the information from miniblock->rw_buffer and display it as such
+until I reached the end of the text, constantly iterating through
+list of miniblocks. Analogous for the write function, we replace the operation by
+display with that of memory allocation and copying of the given information.
 
--functia pmap constituie o iteratie continua prin liste, afisand informatii
-despre blocuri si miniblocuri. In finalul ei am realizat comparatiile necesare
-pentru afisarea permisiunilor. Pentru aflarea numarului de miniblockuri 
-am folosit subprogramul mini, ce aduna dimensiunea fiecarei liste de 
-miniblocuri, corespunzatoare fiecarui bloc din arena.
+- the pmap function constitutes a continuous iteration through lists, displaying information
+about blocks and miniblocks. At the end of it, I made the necessary comparisons
+to display permissions. To find out the number of miniblocks
+I used the subroutine mini, which adds the size of each list of
+miniblocks, corresponding to each block in the arena.
 
--in functia mprotect , iteram prin liste pentru a ajunge la fiecare 
-miniblock, caruia ii schimbam permisiunile prin adaugarea valorilor specifice
-pentru fiecare permisiune in parte. Initial permisiunea pentru miniblockuri 
-este initializata cu 0 pentru a nu depasi valoarea maxima de 7(RWX).
+-in the mprotect function, we iterate through the lists to get to each one
+miniblock, whose permissions we change by adding specific values
+for each separate permission. Initial permission for miniblocks
+is initialized with 0 in order not to exceed the maximum value of 7(RWX).
